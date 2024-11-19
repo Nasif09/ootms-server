@@ -1,17 +1,41 @@
-const express = require('express');
+const express = require("express");
+const dotenv = require("dotenv");
+const mongoose = require("mongoose");
+const path = require("path");
+const cookieParser = require("cookie-parser");
+
+const routes = require("./routes");
+const { notFoundHandler } = require("./middlewares/common/errorHandler");
 
 const app = express();
-const PORT = 3000;
+dotenv.config();
 
-app.get('/', (req, res)=>{
-    res.status(200);
-    res.send("Welcome to root URL of Server");
-});
 
-app.listen(PORT, (error) =>{
-    if(!error)
-        console.log("Server is Successfully Running, and App is listening on port "+ PORT)
-    else 
-        console.log("Error occurred, server can't start", error);
-    }
-);
+//database connection
+mongoose.connect(process.env.MONGO_CONNECTION_STRING, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+})
+.then(() => console.log("Database connection successful"))
+.catch((err) => console.log(err));
+
+//request  parser
+app.use(express.json());
+app.use(express.urlencoded({extended: true}));
+
+
+//set static folder
+app.use(express.static(path.join(__dirname, "public")));
+
+//parse cookie
+app.use(cookieParser(process.env.COOKIE_SECRET));
+
+//routes
+app.use("/api/v1", routes);
+
+// //404 not found handler
+app.use(notFoundHandler);
+
+app.listen(process.env.PORT,()=> {
+    console.log(`app listen to port ${process.env.PORT}`)
+})

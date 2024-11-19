@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
 
 const loadRequestSchema = new mongoose.Schema({
-    shipperId: { type: mongoose.Types.ObjectId, ref: "User" },
-    driverId: { type: mongoose.Types.ObjectId, ref: "User" },
+    loadId: { type: mongoose.Types.ObjectId, ref: "Load" },
+    userId: { type: mongoose.Types.ObjectId, ref: "User" },
+    requestedBy : { type: String}, //role fetched by userId
     status: { type: String, enum: ['pending', 'picked', 'in transit'], default: 'pending' },
 },
     {
