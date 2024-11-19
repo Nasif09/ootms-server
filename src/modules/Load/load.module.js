@@ -9,9 +9,9 @@ const loadSchema = new mongoose.Schema({
     state: { type: String, required: [true, 'state is required'] },
     zip: { type: Number, required: [true, 'zip is required'] },
     po: { type: Number, required: [true, 'post office is required'] },
-
-    latitude: { type: String, require: true },
-    longitude: { type: String, require: true },
+    address: { type: String}
+    // latitude: { type: String, require: true },
+    // longitude: { type: String, require: true },
   },
   receiverAddress: {
     name: { type: String, trim: true },
@@ -21,9 +21,9 @@ const loadSchema = new mongoose.Schema({
     state: { type: String, required: [true, 'state is required'] },
     zip: { type: Number, required: [true, 'zip is required'] },
     po: { type: Number, required: [true, 'post office is required'] },
-
-    latitude: { type: String, require: true },
-    longitude: { type: String, require: true },
+    address: { type: String}
+    // latitude: { type: String, require: true },
+    // longitude: { type: String, require: true },
   },
   palletSpace: { type: Number },
   weight: { type: Number },
@@ -39,7 +39,7 @@ const loadSchema = new mongoose.Schema({
   },
   status: { type: String, enum: ['pending', 'rejected', 'accept'], default: 'pending' },
   
-  UserId: { type: mongoose.Types.ObjectId, ref: "User" },
+  userId: { type: mongoose.Types.ObjectId, ref: "User" },
   //receiverId: { type: mongoose.Types.ObjectId, ref: "User" },
   driverId: { type: mongoose.Types.ObjectId, ref: "User" },
 },

@@ -7,7 +7,7 @@ const User = require("./user.model");
 const { sendOTP, verifyOTP, deleteOTP } = require('../Otp/otp.service');
 const { addUser, getUserByEmail, login, updateUser } = require('./user.service');
 const { addToken, verifyToken, deleteToken } = require('../Token/token.controller');
-const { use } = require('./user.route');
+// const { use } = require('./user.route');
 
 
 //signUp
