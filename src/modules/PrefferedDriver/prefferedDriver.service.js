@@ -1,8 +1,7 @@
 const Driver = require("./prefferedDriver.model");
 
 const addDriver = async (driverId, userId) => {
-
-console.log(driverId);
+    console.log({driverId});
     const driver = new Driver({
         userId,
         favourite: [{ driverId: driverId }] 

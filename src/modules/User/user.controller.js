@@ -140,7 +140,7 @@ const changePassword = async (req, res) => {
             console.log("SUCCESSFULL");
             return res.status(400).json(response({ status: 'OK', statusCode: '200', type: 'user', message: 'your password has been changed successfully' }));
         }else{
-            return res.status(400).json(response({ status: 'Failed', statusCode: '500', type: 'user', message: 'Failed!!', errors: error.message }));
+            return res.status(400).json(response({ status: 'Failed', statusCode: '500', type: 'user', message: 'Failed!!'}));
         }
 
         // const isSignIn = await signIn(token.email, oldPassword);
@@ -168,7 +168,7 @@ const updateProfile = async (req, res) => {
             const userData = await newUser.save();
             return res.status(201).json(response({ status: 'OK', statusCode: '201', type: 'user', message: "Profile pic uploaded", data: userData }));
         } else {
-            return res.status(400).json(response({ status: 'Fail', statusCode: '404', type: 'user', message: "file not found", errors: error.message }));
+            return res.status(400).json(response({ status: 'Fail', statusCode: '404', type: 'user', message: "file not found" }));
         }
     } catch (error) {
         console.log(error);
@@ -202,7 +202,7 @@ const signIn = async (req, res) => {
 
             return res.status(200).json(response({ status: "OK", statusCode: '200', type: "user", message: 'SignIn-success', data: user, accessToken: token }));
         } else {
-            return res.status(401).json(response({ status: "Invalid", statusCode: '401', type: "user", message: 'Invalid credentials', errors: error.message }));
+            return res.status(401).json(response({ status: "Invalid", statusCode: '401', type: "user", message: 'Invalid credentials'}));
         }
     } catch (error) {
         return res.status(400).json(response({ status: 'Fail', statusCode: '401', type: 'user', message: "SignIn Failed", errors: error.message }));

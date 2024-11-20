@@ -7,7 +7,7 @@ const transportSchema = new mongoose.Schema({
   palletSpace: { type: Number, require: true },
   availablity: { type: Boolean },
   
-  // cdlNumber: { type: String, require: [true, 'CDL Number is required'] },
+  cdlNumber: { type: String, require: [true, 'CDL Number is required'] },
   documents: { type: String },
 })
 
