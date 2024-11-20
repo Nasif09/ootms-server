@@ -2,7 +2,7 @@ const express = require('express');
 
 
 const userRoutes = require('../modules/User/user.route');
-// const favouriteDriverRoutes = require('../modules/PrefferedDriver/prefferedDriver.route');
+const prefferedDriverRoutes = require('../modules/PrefferedDriver/prefferedDriver.route');
  const loadRoutes = require('../modules/Load/load.route');
 // const loadRequestRoutes = require('../modules/LoadRequest/loadRequest.route');
 // const mySubscriptionRoutes = require('../modules/MySubscription/mySubscription.route');
@@ -17,10 +17,10 @@ const moduleRoutes = [
     path: '/users',
     route: userRoutes,
   },
-  // {
-  //   path: '/favourite-driver',
-  //   route: favouriteDriverRoutes,
-  // },
+  {
+    path: '/preffered-driver',
+    route: prefferedDriverRoutes,
+  },
   {
     path: '/load',
     route: loadRoutes,

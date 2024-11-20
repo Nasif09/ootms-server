@@ -19,6 +19,12 @@ const login = async ({ email, password }) => {
   }
 }
 
+//find assigned load by user id
+const findUserById = async (id) => {
+  return await User.findById(id);
+}
+
+
 const getUserByEmail = async (email) => {
   if (!email) {
     return response({ message: 'email is required' });
@@ -45,5 +51,6 @@ module.exports = {
   login,
   updateUser,
   getUserByEmail,
-  addUser
+  addUser,
+  findUserById
 }

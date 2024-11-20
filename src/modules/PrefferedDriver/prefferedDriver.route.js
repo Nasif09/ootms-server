@@ -1,13 +1,11 @@
 const express = require('express');
 
-const { } = require('');
-
+const isLogin = require('../../middlewares/isLogin');
+const { addPrefferedDriver } = require('./prefferedDriver.controller');
 
 const router = express.Router();
 
-
-router.get('/', );
-
+router.post('/',isLogin, addPrefferedDriver);
 
 
 module.exports = router;
