@@ -8,8 +8,8 @@ const isAdmin = (req,res,next)=>{
         let token = authorization.split(" ")[1];
         if(token){
             const decoded  = jwt.verify(token, process.env.JWT_SECRECT);
+            req.User = decoded;
             if( req.User.role === "admin"){
-                req.User = decoded;
                 next();
             }else{
                 return res.json(response({ type: 'user', message: "user is not admin"}));

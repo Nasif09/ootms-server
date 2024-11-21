@@ -4,7 +4,7 @@ const express = require('express');
 const userRoutes = require('../modules/User/user.route');
 const prefferedDriverRoutes = require('../modules/PrefferedDriver/prefferedDriver.route');
  const loadRoutes = require('../modules/Load/load.route');
-// const loadRequestRoutes = require('../modules/LoadRequest/loadRequest.route');
+const loadRequestRoutes = require('../modules/LoadRequest/loadRequest.route');
 // const mySubscriptionRoutes = require('../modules/MySubscription/mySubscription.route');
 // const subscriptionRoutes = require('../modules/Subscription/subscription.route');
 // const transportRoutes = require('../modules/Transport/transport.route');
@@ -25,10 +25,10 @@ const moduleRoutes = [
     path: '/load',
     route: loadRoutes,
   },
-  // {
-  //   path: '/load-request',
-  //   route: loadRequestRoutes,
-  // },
+  {
+    path: '/load-request',
+    route: loadRequestRoutes,
+  },
   // {
   //   path: '/my-subscription',
   //   route: mySubscriptionRoutes,

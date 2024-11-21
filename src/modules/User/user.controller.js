@@ -7,6 +7,7 @@ const User = require("./user.model");
 const { sendOTP, verifyOTP, deleteOTP } = require('../Otp/otp.service');
 const { addUser, getUserByEmail, login, updateUser } = require('./user.service');
 const { addToken, verifyToken, deleteToken } = require('../Token/token.controller');
+const { addTransport } = require('../Transport/transport.service');
 // const { use } = require('./user.route');
 
 
@@ -49,11 +50,20 @@ const validateEmailSignUp = async (req, res) => {
 //Complete your Acount
 const completeAccount = async (req, res) => {
     try {
-        var { phone, taxid, address } = req.body;
-        var id = req.User.id;
-        const newUser = { phone, taxid, address };
-        const user = await updateUser(newUser, id );
-        return res.status(201).json(response({ status: 'OK', statusCode: '201', type: 'user', message: " Acount completed Successfully", data: user }));
+        if (req.User.role === 'user') {
+            var { phone, taxid, address } = req.body;
+            var id = req.User.id;
+            const newUser = { phone, taxid, address };
+            const user = await updateUser(newUser, id);
+            return res.status(201).json(response({ status: 'OK', statusCode: '201', type: 'user', message: " Acount completed Successfully", data: user }));
+        }else{
+            var { phone, truckNumber, trailerSize, palletSpace, cdlNumber } = req.body;
+            var id = req.User.id;
+            const truckInfo = { truckNumber, trailerSize, palletSpace, cdlNumber, driverId: id };
+            const truck = await addTransport(truckInfo);
+            await updateUser({phone}, id);
+            return res.status(201).json(response({ status: 'OK', statusCode: '201', type: 'user', message: " Acount completed Successfully", data: truck }));
+        }
     } catch (error) {
         console.log(error)
         return res.status(400).json(response({ status: 'Fail', statusCode: '400', type: 'user', message: "Signup Failed", errors: error.message }));
@@ -129,18 +139,18 @@ const resetPassword = async (req, res) => {
 const changePassword = async (req, res) => {
     try {
         const { oldPassword, newPassword } = req.body;
-        const {email } = req.User;
+        const { email } = req.User;
         password = oldPassword;
-        const user = await login({email, password});
-        console.log("User",user);
+        const user = await login({ email, password });
+        console.log("User", user);
         const hashedPassword = await bcrypt.hash(newPassword, 10);
         user.password = hashedPassword;
         const success = await user.save();
-        if(success){
+        if (success) {
             console.log("SUCCESSFULL");
             return res.status(400).json(response({ status: 'OK', statusCode: '200', type: 'user', message: 'your password has been changed successfully' }));
-        }else{
-            return res.status(400).json(response({ status: 'Failed', statusCode: '500', type: 'user', message: 'Failed!!'}));
+        } else {
+            return res.status(400).json(response({ status: 'Failed', statusCode: '500', type: 'user', message: 'Failed!!' }));
         }
 
         // const isSignIn = await signIn(token.email, oldPassword);
@@ -182,7 +192,7 @@ const signIn = async (req, res) => {
     try {
         const { email, password } = req.body;
 
-        const user = await login( {email, password} );
+        const user = await login({ email, password });
         if (user) {
             const payload = {
                 id: user._id,
@@ -202,7 +212,7 @@ const signIn = async (req, res) => {
 
             return res.status(200).json(response({ status: "OK", statusCode: '200', type: "user", message: 'SignIn-success', data: user, accessToken: token }));
         } else {
-            return res.status(401).json(response({ status: "Invalid", statusCode: '401', type: "user", message: 'Invalid credentials'}));
+            return res.status(401).json(response({ status: "Invalid", statusCode: '401', type: "user", message: 'Invalid credentials' }));
         }
     } catch (error) {
         return res.status(400).json(response({ status: 'Fail', statusCode: '401', type: 'user', message: "SignIn Failed", errors: error.message }));

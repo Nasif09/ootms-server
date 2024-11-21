@@ -47,10 +47,16 @@ const updateUser = async (userData, id) => {
   return await user.save();
 }
 
+const getUser = async (filter) => {
+  const driver = await User.find(filter);
+  return driver;
+}
+
 module.exports = {
   login,
   updateUser,
   getUserByEmail,
   addUser,
-  findUserById
+  findUserById,
+  getUser
 }

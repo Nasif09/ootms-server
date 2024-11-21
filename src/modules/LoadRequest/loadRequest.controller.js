@@ -1,6 +1,5 @@
 const response = require("../../helpers/response");
-const { getTransport } = require("./loadRequest.service");
-const { addDriver, getDriverById } = require("./prefferedDriver.service");
+const { getTransport } = require("../Transport/transport.service");
 
 
 
@@ -20,6 +19,5 @@ const findTransportInfo = async (req, res) => {
 }
 
 module.exports = { 
-    
     findTransportInfo
 };

@@ -13,6 +13,7 @@ const getDriverById = async(userId) => {
     return await Driver.findOne({userId}).populate('userId', 'name email');
 }
 
+
 module.exports = {
     addDriver,
     getDriverById

@@ -1,5 +1,6 @@
 const response = require("../../helpers/response");
-const { addDriver, getDriverById } = require("./prefferedDriver.service");
+const { getUser } = require("../User/user.service");
+const { addDriver, getDriverById, getDriver } = require("./prefferedDriver.service");
 
 
 //ADD PREFFERED DRIVER
@@ -43,7 +44,66 @@ const yourPrefferedDriver = async (req, res) => {
     }
 }
 
+// Search preferred driver
+const searchDriver = async (req, res) => {
+    try {
+        const search = req.query.search || '';
+        
+        if (!search) {
+            return res.status(200).json(response({ 
+                status: 'OK', 
+                statusCode: '200', 
+                type: 'driver', 
+                message: "No search term provided", 
+                data: [] 
+            }));
+        }
+        //const searchRegEx = new RegExp('^' + search + '.*', 'i'); // Matches names or emails starting with the search term
+        const searchRegEx = new RegExp('.*' + search + '.*', 'i');
+
+        const filter = {
+            role: "driver",
+            $or: [
+                { name: { $regex: searchRegEx } },
+                { email: { $regex: searchRegEx } },
+                ...(isNaN(search) ? [] : [{ phone: parseInt(search, 10) }]) // Only add phone filter if search is numeric
+            ]
+        };
+
+        const drivers = await getUser(filter);
+
+        if (!drivers || drivers.length === 0) {
+            return res.status(404).json(response({ 
+                status: 'Fail', 
+                statusCode: '404', 
+                type: 'driver', 
+                message: "No driver found" 
+            }));
+        }
+
+        return res.status(200).json(response({ 
+            status: 'OK', 
+            statusCode: '200', 
+            type: 'driver', 
+            message: "Fetched driver(s) successfully", 
+            data: drivers 
+        }));
+
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json(response({ 
+            status: 'Fail', 
+            statusCode: '500', 
+            type: 'driver', 
+            message: "Failed to fetch driver(s)", 
+            errors: error.message 
+        }));
+    }
+}
+
+
 module.exports = {
     addPrefferedDriver,
-    yourPrefferedDriver
+    yourPrefferedDriver,
+    searchDriver
 };
