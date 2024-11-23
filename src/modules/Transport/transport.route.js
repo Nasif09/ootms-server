@@ -1,12 +1,12 @@
 const express = require('express');
-
-const { } = require('');
+const isDriver = require('../../middlewares/isDriver');
+const { addtransport } = require('./transport.controller');
 
 
 const router = express.Router();
 
 
-router.get('/', );
+router.post('/', isDriver, addtransport);
 
 
 

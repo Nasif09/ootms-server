@@ -7,7 +7,7 @@ const prefferedDriverRoutes = require('../modules/PrefferedDriver/prefferedDrive
 const loadRequestRoutes = require('../modules/LoadRequest/loadRequest.route');
 // const mySubscriptionRoutes = require('../modules/MySubscription/mySubscription.route');
 // const subscriptionRoutes = require('../modules/Subscription/subscription.route');
-// const transportRoutes = require('../modules/Transport/transport.route');
+const transportRoutes = require('../modules/Transport/transport.route');
 
 const router = express.Router();
 
@@ -37,10 +37,10 @@ const moduleRoutes = [
   //   path: '/subscription',
   //   route: subscriptionRoutes,
   // },
-  // {
-  //   path: '/transport',
-  //   route: transportRoutes,
-  // },
+  {
+    path: '/transport',
+    route: transportRoutes,
+  },
 ];
 
 moduleRoutes.forEach((route) => router.use(route.path, route.route));

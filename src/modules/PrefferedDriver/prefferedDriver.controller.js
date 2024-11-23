@@ -10,9 +10,9 @@ const addPrefferedDriver = async (req, res) => {
         var userId = req.User.id;
         const driver = await getDriverById(userId);
 
-        console.log({ driverId });
-        console.log({ userId });
-        console.log({ driver });
+        // console.log({ driverId });
+        // console.log({ userId });
+        // console.log({ driver });
         if (!driver) {
             const fvtdriver = await addDriver(driverId, userId);
             return res.status(201).json(response({ status: 'OK', statusCode: '201', type: 'driver', message: "fvtdriver Successfull", data: fvtdriver }));

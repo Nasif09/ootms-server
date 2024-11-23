@@ -5,7 +5,7 @@ const crypto = require('crypto');
 const response = require("../../helpers/response");
 const User = require("./user.model");
 const { sendOTP, verifyOTP, deleteOTP } = require('../Otp/otp.service');
-const { addUser, getUserByEmail, login, updateUser } = require('./user.service');
+const { addUser, getUserByEmail, login, updateUser, findUserById } = require('./user.service');
 const { addToken, verifyToken, deleteToken } = require('../Token/token.controller');
 const { addTransport } = require('../Transport/transport.service');
 // const { use } = require('./user.route');
@@ -55,18 +55,18 @@ const completeAccount = async (req, res) => {
             var id = req.User.id;
             const newUser = { phone, taxid, address };
             const user = await updateUser(newUser, id);
-            return res.status(201).json(response({ status: 'OK', statusCode: '201', type: 'user', message: " Acount completed Successfully", data: user }));
+            return res.status(201).json(response({ status: 'OK', statusCode: '201', type: 'user', message: " Account completed Successfully", data: user }));
         }else{
             var { phone, truckNumber, trailerSize, palletSpace, cdlNumber } = req.body;
             var id = req.User.id;
-            const truckInfo = { truckNumber, trailerSize, palletSpace, cdlNumber, driverId: id };
-            const truck = await addTransport(truckInfo);
+            const truckInfo = { truckNumber, trailerSize, palletSpace, cdlNumber};
+            const truck = await addTransport(id, truckInfo);
             await updateUser({phone}, id);
-            return res.status(201).json(response({ status: 'OK', statusCode: '201', type: 'user', message: " Acount completed Successfully", data: truck }));
+            return res.status(201).json(response({ status: 'OK', statusCode: '201', type: 'user', message: " Account completed Successfully", data: truck }));
         }
     } catch (error) {
         console.log(error)
-        return res.status(400).json(response({ status: 'Fail', statusCode: '400', type: 'user', message: "Signup Failed", errors: error.message }));
+        return res.status(400).json(response({ status: 'Fail', statusCode: '400', type: 'user', message: "Failed to compelete account info", errors: error.message }));
     }
 }
 
@@ -152,14 +152,6 @@ const changePassword = async (req, res) => {
         } else {
             return res.status(400).json(response({ status: 'Failed', statusCode: '500', type: 'user', message: 'Failed!!' }));
         }
-
-        // const isSignIn = await signIn(token.email, oldPassword);
-        // if(isSignIn){
-        //     const user = await getUserByEmail(token.email);
-        //     user.password = newPassword;
-        //     await user.save();
-        //     return json(response({ status: 'OK', statusCode: '200', type: 'user', message: 'your password has been changed successfully' }));
-        // }
 
     } catch (error) {
         console.log(error);
@@ -261,7 +253,8 @@ const allUsers = async (req, res) => {
 const getUsersById = async (req, res) => {
     try {
         const { id } = req.User;
-        const user = await User.findById(id);
+        const user = await findUserById(id);
+        console.log({user});
         if (!user) {
             return res.status(404).json(response({ status: 'Not-found', statusCode: '404', type: 'user', message: "user not found" }));
         }

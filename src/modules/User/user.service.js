@@ -21,7 +21,7 @@ const login = async ({ email, password }) => {
 
 //find assigned load by user id
 const findUserById = async (id) => {
-  return await User.findById(id);
+  return await User.findById(id).populate("transport");
 }
 
 

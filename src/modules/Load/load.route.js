@@ -8,7 +8,7 @@ const router = express.Router();
 
 
 router.post('/', isLogin , createLoad);
-router.get('/id', isLogin, assignedLoad);  //using userId
+router.get('/id', isLogin, assignedLoad);  //fetched users all assigned  using userId
 router.post('/assign-driver',isLogin, assignDriver);
 
 // router.get('/shipping-history/:id', shippingHistory);  //using userId
