@@ -1,17 +1,13 @@
 const Transport = require("./transport.model");
 
-const addTransport = async (id, truckInfo) => {
-    var driverId = id;
-    const transport = new Transport({
-        driverId,
-        transport: [ truckInfo ] 
-    });
-    return await transport.save();
+const addTransport = async (transport) => {
+    const newTransport = new Transport(transport);
+    return await newTransport.save();
 }
 
 
-const getTransport = async(driverId) => {
-    return await Transport.findOne({driverId}).populate('driverId');
+const getTransport = async(driverId, truckNumber) => {
+    return await Transport.find({driverId: driverId, truckNumber: truckNumber}).populate('driverId');
 }
 
 

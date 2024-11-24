@@ -39,7 +39,7 @@ const loadSchema = new mongoose.Schema({
   },
   status: { type: String, enum: ['pending', 'rejected', 'accept'], default: 'pending' },
   driverId: { type: mongoose.Types.ObjectId, ref: "User" },
-  // driverId: { type: mongoose.Types.ObjectId, ref: "User" }
+  userId: { type: mongoose.Types.ObjectId, ref: "User" }
 
 },
   {
