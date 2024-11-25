@@ -18,9 +18,7 @@ router.post('/', fileUpload, updateProfile);
 router.get('/', isAdmin ,allUsers);
 router.get('/id',isLogin, getUsersById);
 router.delete('/', isLogin, deleteAccount);
-
 router.post('/complete-account', isLogin, completeAccount);
-
 router.post('/forget-password', forgetPassword);
 router.post('/verify-forgetPassword', verifyForgetPassword);
 router.post('/reset-password', resetPassword);

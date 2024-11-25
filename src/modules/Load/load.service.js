@@ -1,5 +1,5 @@
 // const response = require("../../helpers/response");
-const Load = require("./load.module");
+const Load = require("./load.model");
 
 
 // create load
@@ -52,9 +52,14 @@ const getLoad = async (filter) => {
     //return await Load.findOne({ "userId": id, "_id" : loadId });
     return await Load.findOne(filter);
 }
+const getallLoad = async (filter) => {
+    //return await Load.findOne({ "userId": id, "_id" : loadId });
+    return await Load.find(filter);
+}
 
 module.exports = {
     addLoad,
     getLoad,
+    getallLoad,
     findLoadById
 }

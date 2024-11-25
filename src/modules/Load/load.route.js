@@ -13,7 +13,7 @@ router.get('/userid', isLogin, assignedLoad);  //fetched users all assigned  usi
 router.post('/assign-driver',isLogin, assignDriver); /// not complete
 
 
-router.post('/loaddetails',isDriver, findLoad)
+router.post('/loaddetails',isDriver, findLoad) //loaddetails for driver
 // router.get('/shipping-history/:id', shippingHistory);  //using userId
 
 module.exports = router;

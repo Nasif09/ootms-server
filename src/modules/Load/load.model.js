@@ -37,7 +37,7 @@ const loadSchema = new mongoose.Schema({
     type: [String],
     enum: ['Hazmat', 'Dangerous', 'Flammable Gas 2', 'Poson 6', 'Corrosive', 'Oxygen2', 'Dangerous', 'Flamable 3', 'Radioactive', 'Non-Flammable']
   },
-  status: { type: String, enum: ['pending', 'rejected', 'accept'], default: 'pending' },
+  status: { type: String, enum: ['pending','requested', 'rejected', 'accept'], default: 'pending' },
   driverId: { type: mongoose.Types.ObjectId, ref: "User" },
   userId: { type: mongoose.Types.ObjectId, ref: "User" }
 

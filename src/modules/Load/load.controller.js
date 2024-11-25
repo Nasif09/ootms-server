@@ -58,15 +58,15 @@ const assignDriver = async (req, res) => {
         var filter = { "userId": id, "_id" : loadId };
         const load = await getLoad(filter);
         if (!load) {
-            return res.status(404).json(response({ status: 'Not-found', statusCode: '404', type: 'load', message: "no load assigned by this id" }));
+            return res.status(404).json(response({ status: 'Not-found', statusCode: '404', type: 'load', message: "no driver assigned by this id" }));
         } else {
             load.driverId = driverId;
             const newLoad = await load.save();
-            return res.status(201).json(response({ status: 'OK', statusCode: '201', type: 'load', message: "Load fetched Successfully", data: newLoad }));
+            return res.status(201).json(response({ status: 'OK', statusCode: '201', type: 'load', message: "assign driver successfull", data: newLoad }));
         }
     } catch (error) {
         console.log(error);
-        return res.status(400).json(response({ status: 'Fail', statusCode: '400', type: 'load', message: "Failed to create load", errors: error.message }));
+        return res.status(400).json(response({ status: 'Fail', statusCode: '400', type: 'load', message: "Failed assign driver", errors: error.message }));
     }
 }
 

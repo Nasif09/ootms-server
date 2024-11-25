@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const loadRequestSchema = new mongoose.Schema({
     loadId: { type: mongoose.Types.ObjectId, ref: "Load" },
-    transportId: { type: mongoose.Types.ObjectId, ref: "Transport" },
+    transportId: { type: String },
     status: { type: String, enum: ['pending', 'requested', 'picked', 'in transit'] },
 },
     {
