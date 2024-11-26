@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 
+
+
 const loadSchema = new mongoose.Schema({
   shipperAddress: {
     name: { type: String, trim: true },
@@ -13,6 +15,7 @@ const loadSchema = new mongoose.Schema({
     // latitude: { type: String, require: true },
     // longitude: { type: String, require: true },
   },
+
   receiverAddress: {
     name: { type: String, trim: true },
     email: { type: String, require: [true, 'Email is required'], trim: true },
@@ -25,19 +28,20 @@ const loadSchema = new mongoose.Schema({
     // latitude: { type: String, require: true },
     // longitude: { type: String, require: true },
   },
+  
   palletSpace: { type: Number },
   weight: { type: Number },
   billOfLoading: { type: Number },
   description: { type: String },
 
-  pickUpDate: { type: Date },
-  deliveryDate: { type: Date },
+  pickedUp: { type: Date },
+  delivered: { type: Date },
   loadType: { type: String, require: [true, 'Load Type is require'] },
   productType: {
     type: [String],
     enum: ['Hazmat', 'Dangerous', 'Flammable Gas 2', 'Poson 6', 'Corrosive', 'Oxygen2', 'Dangerous', 'Flamable 3', 'Radioactive', 'Non-Flammable']
   },
-  status: { type: String, enum: ['pending','requested', 'rejected', 'accept'], default: 'pending' },
+  status: { type: String, enum: ['pending','requested', 'rejected', 'accepted'], default: 'pending' },
   driverId: { type: mongoose.Types.ObjectId, ref: "User" },
   userId: { type: mongoose.Types.ObjectId, ref: "User" }
 

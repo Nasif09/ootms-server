@@ -25,10 +25,10 @@ const moduleRoutes = [
     path: '/load',
     route: loadRoutes,
   },
-  {
-    path: '/load-request',
-    route: loadRequestRoutes,
-  },
+  // {
+  //   path: '/load-request',
+  //   route: loadRequestRoutes,
+  // },
   // {
   //   path: '/my-subscription',
   //   route: mySubscriptionRoutes,
