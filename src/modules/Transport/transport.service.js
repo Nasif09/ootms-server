@@ -6,8 +6,8 @@ const addTransport = async (transport) => {
 }
 
 
-const getTransport = async(driverId, truckNumber) => {
-    return await Transport.find({driverId: driverId, truckNumber: truckNumber}).populate('driverId');
+const getTransport = async(filter) => {
+    return await Transport.find(filter);
 }
 
 

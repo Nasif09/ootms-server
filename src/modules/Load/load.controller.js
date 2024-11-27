@@ -1,6 +1,7 @@
 const response = require("../../helpers/response");
-const { createLoadReq, findloadRequests, getTransportInfo } = require("../LoadRequest/loadRequest.service");
+const { createLoadReq, findloadRequests, getTransportInfo, deleteOtherLoadReq } = require("../LoadRequest/loadRequest.service");
 const { getTransport } = require("../Transport/transport.service");
+const { search } = require("./load.route");
 const { addLoad, findLoadById, getLoad, getallLoad } = require("./load.service");
 
 const createLoad = async (req, res) => {
@@ -71,25 +72,39 @@ const loadRequests = async (req, res) => {
 //load Details
 const loadDetails = async (req, res) => {
     try {
-        const { id, role } = req.User;
         var { loadId } = req.body;
         var filter = { _id: loadId };
         const load = await getLoad(filter);
-        if( role === 'driver'){
-            return res.status(201).json(response({ status: 'OK', statusCode: '201', type: 'load', message: "Load fetched Successfully", data: load }));
-        }else{
-            //??? not complete
-            var driverId = load.driverId;
-            const transport = await getTransportInfo(driverId);
-            return res.status(201).json(response({ status: 'OK', statusCode: '201', type: 'transport', message: "transport fetched Successfully", data: transport }));
-        }
-        
+        return res.status(201).json(response({ status: 'OK', statusCode: '201', type: 'load', message: "Load fetched Successfully", data: load }));
     } catch (error) {
         console.log(error);
         return res.status(400).json(response({ status: 'Fail', statusCode: '400', type: 'load', message: "Failed to fetched to loadDetails", errors: error.message }));
     }
 }
 
+//find Load(nearest)
+const findLoad = async (req, res) => {
+    try {
+        var { palletSpace } = req.body;
+        //console.log(typeof (palletSpace));
+        var filter = {
+            palletSpace: { $lte: palletSpace },
+            status: { $in : ['pending', 'requested']}
+            // trailerSize,
+            // loation
+        }
+        const load = await getallLoad(filter);
+
+        if (!load) {
+            return res.status(404).json(response({ status: 'Not-found', statusCode: '404', type: 'user', message: "No load found for you" }));
+        } else {
+            return res.status(200).json(response({ status: "OK", statusCode: '200', type: "user", message: 'successfully fetch load', data: load }));
+        }
+
+    } catch (error) {
+        return res.status(200).json(response({ status: "error", statusCode: '400', type: "load", message: 'failed to find load', erros: error.message }));
+    }
+}
 
 //assignLoad
 const requestForLoad = async (req, res) => {
@@ -108,6 +123,7 @@ const requestForLoad = async (req, res) => {
             }
             if (role === 'driver') {
                 query.driverId = id,
+                //??check validity of truck
                 query.truckNumber = truckNumber
             } else {
                 query.driverId = driverId
@@ -129,27 +145,29 @@ const requestForLoad = async (req, res) => {
     }
 }
 
-const acceptLoadrequest = async (req, res) => { //???not complete
+const acceptLoadrequest = async (req, res) => { 
     try {
         const { loadReqId } = req.body;
-        var filter = {
-            loadId: loadReqId,
-            status: 'requested'
-        }
-        var loadReq = await findloadRequests(filter);
-        console.log("loadReq",loadReq);
+        const query = { _id: loadReqId, status: 'requested' };
+        const loadReq = await findloadRequests(query);
         if(loadReq){
-            loadReq.status = 'accepted';
-            var _id = loadReqId;
-            const load = await getLoad({_id});
-            console.log("load",load);
+            var filter ={_id: loadReq.loadId};
+            const load = await getLoad(filter);
             load.status = 'accepted';
             load.driverId = loadReq.driverId;
             await load.save();
+            loadReq.status = 'accepted';
+            await loadReq.save();
+            var searchData = {
+                driverId: { $ne: load.driverId },
+                loadId : loadReq.loadId
+            }
+            await deleteOtherLoadReq(searchData);
+
         }else{
-            return res.status(400).json(response({ status: 'Fail', statusCode: '400', type: 'load', message: "you dont have request any load"}));
+            return res.status(400).json(response({ status: 'Fail', statusCode: '400', type: 'load', message: "no load request found"}));
         }
-        return res.status(200).json(response({ status: 'Ok', statusCode: '200', type: 'load', message: "load accepted"}));
+        return res.status(200).json(response({ status: 'Ok', statusCode: '200', type: 'load', message: "load request accepted"}));
     } catch (error) {
         return res.status(400).json(response({ status: 'Fail', statusCode: '400', type: 'load', message: "Failed to accepted load", errors: error.message }));
     }
@@ -161,5 +179,6 @@ module.exports = {
     myLoadRequest,
     loadRequests,
     requestForLoad,
-    acceptLoadrequest
+    acceptLoadrequest,
+    findLoad
 };

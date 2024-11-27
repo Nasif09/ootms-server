@@ -6,8 +6,13 @@ const createLoadReq = async (query) => {
 }
 
 const findloadRequests = async (query) => {
-    return await LoadRequest.findOne(query);
-}
+    return await LoadRequest.findOne(query).populate('loadId').populate('driverId');
+};
+
+const deleteOtherLoadReq = async (searchData) => {
+    return await LoadRequest.deleteMany(searchData);
+};
+
 
 const getTransportInfo = async (driverId) => {
     return await LoadRequest.findOne(driverId).select('driverId driverId');
@@ -16,5 +21,6 @@ const getTransportInfo = async (driverId) => {
 module.exports = {
     createLoadReq,
     findloadRequests,
-    getTransportInfo
+    getTransportInfo,
+    deleteOtherLoadReq
 }

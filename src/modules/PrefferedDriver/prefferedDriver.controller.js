@@ -14,8 +14,11 @@ const addPrefferedDriver = async (req, res) => {
         // console.log({ userId });
         // console.log({ driver });
         if (!driver) {
-            const fvtdriver = await addDriver(driverId, userId);
+            if(userId !== driverId){
+                const fvtdriver = await addDriver(driverId, userId);
             return res.status(201).json(response({ status: 'OK', statusCode: '201', type: 'driver', message: "fvtdriver Successfull", data: fvtdriver }));
+            }
+            return res.status(400).json(response({ status: 'Error', statusCode: '400', type: 'driver', message: "userId and driverId cann't be same"}));
         } else {
             driver.favourite.push({ driverId });
             await driver.save();
