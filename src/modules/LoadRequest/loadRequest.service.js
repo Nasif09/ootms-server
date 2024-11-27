@@ -5,8 +5,16 @@ const createLoadReq = async (query) => {
     return await newLoadReq.save();
 }
 
-const findloadRequests = async (query) => {
-    return await LoadRequest.findOne(query).populate('loadId').populate('driverId');
+const findloadRequests = async (query, loadmodelfields, usermodelfields) => {
+    if (usermodelfields && loadmodelfields === null ) {
+        return await LoadRequest.findOne(query)
+        .select("-_id truckNumber") 
+        .populate('driverId', usermodelfields);
+    }else if(loadmodelfields && usermodelfields){
+        return await LoadRequest.findOne(query).populate('loadId',loadmodelfields).populate('driverId', usermodelfields);
+    }else{
+        return await LoadRequest.findOne(query).populate('loadId').populate('driverId');
+    }
 };
 
 const deleteOtherLoadReq = async (searchData) => {

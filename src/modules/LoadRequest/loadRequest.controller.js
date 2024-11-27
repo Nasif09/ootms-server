@@ -33,17 +33,44 @@ const { createLoadReq, findloadRequests } = require("./loadRequest.service");
 const loadRequestDetails = async (req, res) => {
     try {
         const { loadReqId } = req.body;
-        var loadRequestDetails = await findloadRequests({_id : loadReqId});
-        var filter ={
-            truckNumber: loadRequestDetails.truckNumber
+        var usermodelfields = 'name phone email address';
+        var loadRequest = await findloadRequests({ _id: loadReqId }, null, usermodelfields);
+
+        if (!loadRequest) {
+            return res.status(404).json(response({
+                status: "not found",
+                statusCode: '404',
+                type: "load",
+                message: 'No load request found'
+            }));
         }
-        var transportInfo = await getTransport(filter);
-        return res.status(200).json(response({ status: "ok", statusCode: '200', type: "load", message: 'load Request fetched', data: {loadRequestDetails, transportInfo} }));
+        var filter = { truckNumber: loadRequest.truckNumber };
+        var transportFields = 'truckNumber trailerSize palletSpace availablity';
+        var transportInfo = await getTransport(filter, transportFields); 
+
+        return res.status(200).json(response({
+            status: "ok",
+            statusCode: '200',
+            type: "load",
+            message: 'Load request fetched',
+            data: {
+                driverDetails: loadRequest.driverId, 
+                transportInfo 
+            }
+        }));
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json(response({
+            status: "error",
+            statusCode: '500',
+            type: "load",
+            message: 'Failed to fetch load request',
+            error: error.message
+        }));
     }
-    catch (error) {
-        return res.status(404).json(response({ status: "not found", statusCode: '404', type: "load", message: 'no load Request found' }));
-    }
-}
+};
+
+
 
 const requestLoad = async (req, res) => {
     try {

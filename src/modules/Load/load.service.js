@@ -48,9 +48,13 @@ const findLoadById = async (id, role) => {
 // }
 
 
-const getLoad = async (filter) => {
+const getLoad = async (filter,find) => {
     //return await Load.findOne({ "userId": id, "_id" : loadId });
-    return await Load.findOne(filter);
+    if(find){
+        return await Load.findOne(filter).select(find);
+    }else{
+        return await Load.findOne(filter);
+    }
 }
 const getallLoad = async (filter) => {
     //return await Load.findOne({ "userId": id, "_id" : loadId });

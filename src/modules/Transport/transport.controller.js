@@ -15,10 +15,12 @@ const addtransport = async (req, res) => {
 
 const findTransportInfo = async (req, res) => {
     try {
-        var driverId = req.User.id;
-        var { truckNumber } = req.body;
-        const transport = await getTransport(driverId, truckNumber);
-        if (!transport) {
+        var { transportId } = req.body;
+        var filter = { _id : transportId }
+        var find = 'truckNumber availablity palletSpace trailerSize trailerSize';
+        var modelfields = "name email address phone";
+        const transport = await getTransport(filter, find, modelfields, true);
+        if (!transport) { 
             return res.status(400).json(response({ status: 'Fail', statusCode: '400', type: 'driver', message: "you don't add any transport yet" }));
         }
         return res.status(201).json(response({ status: 'OK', statusCode: '201', type: 'driver', message: "transport fetched Successfull", data: transport }));
@@ -33,4 +35,4 @@ const findTransportInfo = async (req, res) => {
 module.exports = {
     addtransport,
     findTransportInfo
-};
+}; 

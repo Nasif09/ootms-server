@@ -74,7 +74,8 @@ const loadDetails = async (req, res) => {
     try {
         var { loadId } = req.body;
         var filter = { _id: loadId };
-        const load = await getLoad(filter);
+        var find = 'description productType weight delivered pickedUp loadType shipperAddress.name shipperAddress.phone shipperAddress.email receiverAddress.name receiverAddress.phone receiverAddress.email '
+        const load = await getLoad(filter, find);
         return res.status(201).json(response({ status: 'OK', statusCode: '201', type: 'load', message: "Load fetched Successfully", data: load }));
     } catch (error) {
         console.log(error);
@@ -112,7 +113,8 @@ const requestForLoad = async (req, res) => {
         const { id, role } = req.User;
         const { driverId, loadId, truckNumber } = req.body;
         var filter = { _id: loadId, status: { $in: ['pending', 'requested'] } };
-        const load = await getLoad(filter);
+        // find = ''
+        const load = await getLoad(filter,find);
         if (!load) {
             return res.status(404).json(response({ status: 'Not-found', statusCode: '404', type: 'load', message: "no load found by this id" }));
         } else {
