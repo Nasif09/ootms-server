@@ -6,6 +6,7 @@ const loadRequestSchema = new mongoose.Schema({
     driverId: { type: mongoose.Types.ObjectId, ref: "User" },
     requestedBy : { type: String, enum: ['user','driver'], default: 'user' },
     truckNumber: { type: String },
+    availablity: { type: String },
     status: { type: String, enum: ['pending', 'requested', 'rejected','accepted', 'picked', 'delivired'] },
 },
     {

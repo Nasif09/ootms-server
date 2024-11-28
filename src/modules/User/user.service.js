@@ -24,6 +24,9 @@ const findUserById = async (id) => {
   return await User.findById(id).populate("transport");
 }
 
+const findUser = async (id) => {
+  return await User.findById(id);
+}
 
 const getUserByEmail = async (email) => {
   if (!email) {
@@ -48,8 +51,8 @@ const updateUser = async (userData, id) => {
 }
 
 const getUser = async (filter) => {
-  const driver = await User.find(filter);
-  return driver;
+  const user = await User.find(filter);
+  return user;
 }
 
 module.exports = {
@@ -58,5 +61,6 @@ module.exports = {
   getUserByEmail,
   addUser,
   findUserById,
-  getUser
+  getUser,
+  findUser
 }

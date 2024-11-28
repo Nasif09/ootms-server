@@ -5,7 +5,7 @@ const transportSchema = new mongoose.Schema({
   //driverId: { type: String, require: [true, 'driverId is required'] },
   trailerSize: { type: String, require: [true, 'trailerSize is required'] },
   palletSpace: { type: Number, require: [true, 'palletSpace is required'] },
-  availablity: { type: Boolean },
+  // availablity: { type: Boolean },
   truckNumber : {type: String,  require: [true, 'truckNumber is required']},
   cdlNumber: { type: String, require: [true, 'cdlNumber is required'] },
   documents: { type: String },

@@ -2,7 +2,7 @@ const response = require("../../helpers/response");
 //const Load = require("../Load/load.model");
 const { getLoad } = require("../Load/load.service");
 const { getTransport } = require("../Transport/transport.service");
-const { createLoadReq, findloadRequests } = require("./loadRequest.service");
+const { createLoadReq, findloadRequests, findAllLoadReq } = require("./loadRequest.service");
 
 
 
@@ -32,32 +32,41 @@ const { createLoadReq, findloadRequests } = require("./loadRequest.service");
 
 const loadRequestDetails = async (req, res) => {
     try {
+        const { role } = req.User;
         const { loadReqId } = req.body;
-        var usermodelfields = 'name phone email address';
-        var loadRequest = await findloadRequests({ _id: loadReqId }, null, usermodelfields);
+        var drivermodelfields = 'name phone email address';
+        var query = { _id: loadReqId };
+        if (role === 'user') {
+            var loadRequest = await findAllLoadReq(query, drivermodelfields, null, true, false);
+            if (!loadRequest) {
 
-        if (!loadRequest) {
-            return res.status(404).json(response({
-                status: "not found",
-                statusCode: '404',
-                type: "load",
-                message: 'No load request found'
-            }));
-        }
-        var filter = { truckNumber: loadRequest.truckNumber };
-        var transportFields = 'truckNumber trailerSize palletSpace availablity';
-        var transportInfo = await getTransport(filter, transportFields); 
-
-        return res.status(200).json(response({
-            status: "ok",
-            statusCode: '200',
-            type: "load",
-            message: 'Load request fetched',
-            data: {
-                driverDetails: loadRequest.driverId, 
-                transportInfo 
+                return res.status(404).json(response({
+                    status: "not found",
+                    statusCode: '404',
+                    type: "load",
+                    message: 'No load request found'
+                }));
             }
-        }));
+            var filter = { truckNumber: loadRequest[0].truckNumber };
+            var find = 'truckNumber trailerSize palletSpace availablity';
+            var transportInfo = await getTransport(filter, find, null, false);
+
+            return res.status(200).json(response({status: "ok",statusCode: '200',type: "load",message: 'Load request fetched',data: {loadRequest,transportInfo}}));
+
+        } else if (role === 'driver') {
+            var loadmodelfields = 'loadType palletSpace weight pickedUp delivered shipperAddress.address shipperAddress.name receiverAddress.address';
+            var loadRequest = await findAllLoadReq(query, null, loadmodelfields, false, true);
+            if (!loadRequest) {
+                return res.status(404).json(response({
+                    status: "not found",
+                    statusCode: '404',
+                    type: "load",
+                    message: 'No load request found'
+                }));
+            }
+            return res.status(200).json(response({status: "ok",statusCode: '200',type: "load",message: 'Load request fetched',data: loadRequest}));
+        }
+        
     } catch (error) {
         console.error(error);
         return res.status(500).json(response({

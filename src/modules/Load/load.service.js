@@ -33,15 +33,14 @@ const addLoad = async (loadData, id) => {
 
 
 //find assigned load by user id
-
 const findLoadById = async (id, role) => {
     if (role === 'driver') {
         return await Load.find({ "driverId": id });
     } else {
         return await Load.find({ "userId": id });
     }
+    return null;
 }
-
 // const findLoadbyFilter = async (filter) => {
 //     return await Load.find(filter);
     
@@ -55,6 +54,7 @@ const getLoad = async (filter,find) => {
     }else{
         return await Load.findOne(filter);
     }
+    return null;
 }
 const getallLoad = async (filter) => {
     //return await Load.findOne({ "userId": id, "_id" : loadId });
