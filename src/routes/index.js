@@ -8,6 +8,8 @@ const loadRequestRoutes = require('../modules/LoadRequest/loadRequest.route');
 // const mySubscriptionRoutes = require('../modules/MySubscription/mySubscription.route');
 // const subscriptionRoutes = require('../modules/Subscription/subscription.route');
 const transportRoutes = require('../modules/Transport/transport.route');
+const privacyPolicy = require('../modules/PrivacyPolicy/privacyPolicy.route');
+const termscondition = require('../modules/TermAndCondition/termsAndCondition.route');
 
 const router = express.Router();
 
@@ -40,6 +42,14 @@ const moduleRoutes = [
   {
     path: '/transport',
     route: transportRoutes,
+  },
+  {
+    path: '/privacy-policy',
+    route: privacyPolicy
+  },
+  {
+    path: '/terms-condition',
+    route: termscondition
   },
 ];
 
